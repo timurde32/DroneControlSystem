@@ -1,28 +1,22 @@
 ﻿using DroneControlSystem;
 
-Console.WriteLine("=== Система управления БПЛА (версия 1.0) ===");
+Console.WriteLine("=== Система управления БПЛА ===");
 
-Drone myDrone = new Drone("DJI Mini 3", 85);
-
-myDrone.PrintInfo();
-Console.WriteLine();
-
-Console.Write("Введите команду (1 — взлёт, 0 — выход): ");
-int command = int.Parse(Console.ReadLine());
-
-while (command != 0)
+Drone[] drones = new Drone[]
 {
-    if (command == 1)
+    new Drone("DJI Mini 3", 85),
+    new Drone("Autel EVO Lite", 45),
+    new Drone("Parrot Anafi", 15)
+};
+
+foreach (Drone drone in drones)
+{
+    drone.PrintInfo();
+
+    if (drone.BatteryLevel < 20)
     {
-        myDrone.TakeOff();
-    }
-    else
-    {
-        Console.WriteLine("Неизвестная команда.");
+        Console.WriteLine("Внимание! Низкий заряд батареи.");
     }
 
-    Console.Write("Введите команду (1 — взлёт, 0 — выход): ");
-    command = int.Parse(Console.ReadLine());
+    Console.WriteLine();
 }
-
-Console.WriteLine("Программа завершена.");
