@@ -1,8 +1,7 @@
-<<<<<<< HEAD
-﻿using DroneControlSystem;
+using DroneControlSystem;
 
 Console.WriteLine("*******************************************");
-Console.WriteLine("*** Система управления БПЛА (версия 1.0) ***");
+Console.WriteLine("*** Система управления БПЛА (версия 2.0) ***");
 Console.WriteLine("*******************************************");
 
 Drone[] drones = new Drone[]
@@ -62,7 +61,3 @@ while (true)
         Console.WriteLine($"Ошибка: {ex.Message}");
     }
 }
-Console.WriteLine("*******************************************");
-Console.WriteLine("*** Система управления БПЛА (версия 2.0) ***");
-Console.WriteLine("*******************************************");
-
