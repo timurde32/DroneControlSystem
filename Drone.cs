@@ -8,6 +8,9 @@ public class Drone
     public bool IsEngineOn { get; set; }
 
     private const int BatteryConsumptionPerMinute = 2;
+    public Drone() : this("Неизвестный дрон", 100)
+{
+}
 
     public Drone(string model, int batteryLevel)
     {
@@ -66,5 +69,4 @@ public class Drone
         return BatteryLevel / BatteryConsumptionPerMinute;
     }
    
-
 }
