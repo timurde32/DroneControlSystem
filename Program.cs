@@ -42,4 +42,12 @@ if (Console.ReadLine() == "1")
     drones[0].TakeOff();
 }
 
+foreach (Drone drone in drones)
+{
+    if (drone.IsEngineOn)
+    {
+        Console.WriteLine($"Время полёта: {drone.CalculateFlightTime()} мин.");
+    }
+}
+
 Console.WriteLine("Программа завершена.");

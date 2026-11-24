@@ -7,6 +7,8 @@ public class Drone
     public double Altitude { get; set; }
     public bool IsEngineOn { get; set; }
 
+    private const int BatteryConsumptionPerMinute = 2;
+
     public Drone(string model, int batteryLevel)
     {
         Model = model;
@@ -15,11 +17,15 @@ public class Drone
         IsEngineOn = false;
     }
 
+    public Drone(string model) : this(model, 100)
+    {
+    }
+
     public void PrintInfo()
     {
         Console.WriteLine($"Модель: {Model}");
         Console.WriteLine($"Заряд батареи: {BatteryLevel}%");
-        Console.WriteLine($"Высота: {Altitude:F1} м");
+        Console.WriteLine($"Высота: {Altitude} м");
         Console.WriteLine($"Двигатель: {(IsEngineOn ? "включён" : "выключен")}");
     }
 
@@ -27,15 +33,14 @@ public class Drone
     {
         if (BatteryLevel < 20)
         {
-            Console.WriteLine("Недостаточно заряда для взлёта");
+            Console.WriteLine("Недостаточно заряда.");
             return;
         }
 
         IsEngineOn = true;
         Altitude = 10;
         BatteryLevel -= 5;
-
-        Console.WriteLine($"{Model} взлетел. Заряд: {BatteryLevel}%");
+        Console.WriteLine("Взлёт выполнен.");
     }
 
     public void ChargeBattery(int amount)
@@ -49,7 +54,17 @@ public class Drone
 
         Console.WriteLine($"Заряд после подзарядки: {BatteryLevel}%");
     }
-    public Drone(string model) : this(model, 100)
-{
-}
+
+    public int CalculateFlightTime()
+    {
+        if (!IsEngineOn)
+        {
+            Console.WriteLine("Двигатель выключен.");
+            return 0;
+        }
+
+        return BatteryLevel / BatteryConsumptionPerMinute;
+    }
+   
+
 }
