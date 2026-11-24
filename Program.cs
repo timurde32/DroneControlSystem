@@ -13,41 +13,49 @@ Drone[] drones = new Drone[]
 foreach (Drone drone in drones)
 {
     drone.PrintInfo();
-
-    if (drone.BatteryLevel < 20)
-    {
-        Console.WriteLine("Внимание! Низкий заряд батареи.");
-    }
-
     Console.WriteLine();
 }
 
-for (int i = 0; i < drones.Length; i++)
+while (true)
 {
-    if (drones[i].BatteryLevel < 50)
-    {
-        Console.WriteLine($"Подзарядить {drones[i].Model}? (1 - да, 0 - нет)");
+    Console.WriteLine("1 - Взлёт");
+    Console.WriteLine("2 - Расчёт времени полёта");
+    Console.WriteLine("3 - Подзарядка");
+    Console.WriteLine("0 - Выход");
 
-        if (Console.ReadLine() == "1")
+    Console.Write("Введите команду: ");
+
+    if (!int.TryParse(Console.ReadLine(), out int command))
+    {
+        Console.WriteLine("Ошибка: введите число.");
+        continue;
+    }
+
+    try
+    {
+        if (command == 1)
         {
-            drones[i].ChargeBattery(50);
+            drones[0].TakeOff();
+        }
+        else if (command == 2)
+        {
+            Console.WriteLine($"Время полёта: {drones[0].CalculateFlightTime()} мин.");
+        }
+        else if (command == 3)
+        {
+            drones[0].ChargeBattery(50);
+        }
+        else if (command == 0)
+        {
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Неизвестная команда.");
         }
     }
-}
-
-Console.WriteLine("Выполнить взлёт первого дрона? (1 - да, 0 - нет)");
-
-if (Console.ReadLine() == "1")
-{
-    drones[0].TakeOff();
-}
-
-foreach (Drone drone in drones)
-{
-    if (drone.IsEngineOn)
+    catch (Exception ex)
     {
-        Console.WriteLine($"Время полёта: {drone.CalculateFlightTime()} мин.");
+        Console.WriteLine($"Ошибка: {ex.Message}");
     }
 }
-
-Console.WriteLine("Программа завершена.");
