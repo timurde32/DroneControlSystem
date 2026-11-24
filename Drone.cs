@@ -35,6 +35,18 @@ public class Drone
         Altitude = 10;
         BatteryLevel -= 5;
 
-        Console.WriteLine($"{Model} взлетел на высоту 10 м. Заряд: {BatteryLevel}%");
+        Console.WriteLine($"{Model} взлетел. Заряд: {BatteryLevel}%");
+    }
+
+    public void ChargeBattery(int amount)
+    {
+        BatteryLevel += amount;
+
+        if (BatteryLevel > 100)
+        {
+            BatteryLevel = 100;
+        }
+
+        Console.WriteLine($"Заряд после подзарядки: {BatteryLevel}%");
     }
 }

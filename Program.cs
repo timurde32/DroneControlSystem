@@ -20,3 +20,16 @@ foreach (Drone drone in drones)
 
     Console.WriteLine();
 }
+
+for (int i = 0; i < drones.Length; i++)
+{
+    if (drones[i].BatteryLevel < 50)
+    {
+        Console.WriteLine($"Подзарядить {drones[i].Model}? (1 - да, 0 - нет)");
+
+        if (Console.ReadLine() == "1")
+        {
+            drones[i].ChargeBattery(50);
+        }
+    }
+}
