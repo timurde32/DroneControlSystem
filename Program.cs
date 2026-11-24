@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using DroneControlSystem;
 
 Console.WriteLine("*******************************************");
@@ -61,3 +62,7 @@ while (true)
         Console.WriteLine($"Ошибка: {ex.Message}");
     }
 }
+Console.WriteLine("*******************************************");
+Console.WriteLine("*** Система управления БПЛА (версия 2.0) ***");
+Console.WriteLine("*******************************************");
+
