@@ -1,8 +1,7 @@
 using DroneControlSystem;
+using System.Text.Json;
 
-Console.WriteLine("*******************************************");
-Console.WriteLine("*** Система управления БПЛА (версия 2.0) ***");
-Console.WriteLine("*******************************************");
+const string fileName = "drones.json";
 
 Drone[] drones = new Drone[]
 {
@@ -12,52 +11,139 @@ Drone[] drones = new Drone[]
     new Drone("DJI Mavic 3")
 };
 
-foreach (Drone drone in drones)
-{
-    drone.PrintInfo();
-    Console.WriteLine();
-}
-
 while (true)
 {
-    Console.WriteLine("1 - Взлёт");
-    Console.WriteLine("2 - Расчёт времени полёта");
-    Console.WriteLine("3 - Подзарядка");
-    Console.WriteLine("0 - Выход");
+    Console.WriteLine("\n=== Система управления БПЛА (версия 3.0) ===");
+    Console.WriteLine("1. Информация о всех дронах");
+    Console.WriteLine("2. Взлёт дрона");
+    Console.WriteLine("3. Подзарядка дрона");
+    Console.WriteLine("4. Расчёт времени полёта");
+    Console.WriteLine("5. Сохранить состояние");
+    Console.WriteLine("6. Загрузить состояние");
+    Console.WriteLine("0. Выход");
 
-    Console.Write("Введите команду: ");
+    Console.Write("Выберите действие: ");
 
     if (!int.TryParse(Console.ReadLine(), out int command))
     {
-        Console.WriteLine("Ошибка: введите число.");
+        Console.WriteLine("Введите число.");
         continue;
     }
 
-    try
+    if (command == 0)
     {
-        if (command == 1)
+        break;
+    }
+
+    if (command == 1)
+    {
+        foreach (Drone drone in drones)
         {
-            drones[0].TakeOff();
+            drone.PrintInfo();
+            Console.WriteLine();
         }
-        else if (command == 2)
+        continue;
+    }
+
+    if (command == 5)
+    {
+        try
         {
-            Console.WriteLine($"Время полёта: {drones[0].CalculateFlightTime()} мин.");
+            SaveDrones(drones, fileName);
         }
-        else if (command == 3)
+        catch (Exception ex)
         {
-            drones[0].ChargeBattery(50);
+            Console.WriteLine($"Ошибка: {ex.Message}");
         }
-        else if (command == 0)
+        continue;
+    }
+
+    if (command == 6)
+    {
+        try
         {
+            if (File.Exists(fileName))
+            {
+                drones = LoadDrones(fileName);
+                Console.WriteLine("Данные загружены.");
+            }
+            else
+            {
+                Console.WriteLine("Файл не найден.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка: {ex.Message}");
+        }
+        continue;
+    }
+
+    if (command < 2 || command > 4)
+    {
+        Console.WriteLine("Неизвестная команда.");
+        continue;
+    }
+
+    for (int i = 0; i < drones.Length; i++)
+    {
+        Console.WriteLine($"{i + 1}. {drones[i].Model}");
+    }
+
+    Console.Write("Выберите дрон: ");
+
+    if (!int.TryParse(Console.ReadLine(), out int index)
+        || index < 1 || index > drones.Length)
+    {
+        Console.WriteLine("Неверный номер дрона.");
+        continue;
+    }
+
+    Drone selectedDrone = drones[index - 1];
+
+    switch (command)
+    {
+        case 2:
+            selectedDrone.TakeOff();
             break;
-        }
-        else
-        {
-            Console.WriteLine("Неизвестная команда.");
-        }
+
+        case 3:
+            Console.Write("На сколько процентов зарядить: ");
+
+            if (int.TryParse(Console.ReadLine(), out int amount)
+                && amount > 0 && amount <= 100)
+            {
+                selectedDrone.ChargeBattery(amount);
+            }
+            else
+            {
+                Console.WriteLine("Неверное значение.");
+            }
+            break;
+
+        case 4:
+            Console.WriteLine($"Время полёта: {selectedDrone.CalculateFlightTime()} мин.");
+            break;
     }
-    catch (Exception ex)
+}
+
+static void SaveDrones(Drone[] drones, string fileName)
+{
+    var options = new JsonSerializerOptions
     {
-        Console.WriteLine($"Ошибка: {ex.Message}");
-    }
+        WriteIndented = true
+    };
+
+    string json = JsonSerializer.Serialize(drones, options);
+    File.WriteAllText(fileName, json);
+
+    Console.WriteLine("Данные сохранены.");
+}
+
+static Drone[] LoadDrones(string fileName)
+{
+    string json = File.ReadAllText(fileName);
+
+    return JsonSerializer.Deserialize<Drone[]>(json)
+        ?? new Drone[0];
 }
