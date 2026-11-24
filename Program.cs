@@ -1,12 +1,13 @@
 ﻿using DroneControlSystem;
 
-Console.WriteLine("=== Система управления БПЛА ===");
+Console.WriteLine("=== Система управления БПЛА (версия 1.0) ===");
 
 Drone[] drones = new Drone[]
 {
     new Drone("DJI Mini 3", 85),
     new Drone("Autel EVO Lite", 45),
-    new Drone("Parrot Anafi", 15)
+    new Drone("Parrot Anafi", 15),
+    new Drone("DJI Mavic 3")
 };
 
 foreach (Drone drone in drones)
@@ -33,3 +34,12 @@ for (int i = 0; i < drones.Length; i++)
         }
     }
 }
+
+Console.WriteLine("Выполнить взлёт первого дрона? (1 - да, 0 - нет)");
+
+if (Console.ReadLine() == "1")
+{
+    drones[0].TakeOff();
+}
+
+Console.WriteLine("Программа завершена.");
